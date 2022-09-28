@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using DEVinCar.Api.Annotations;
+using DEVinCar.Domain.Annotations;
 
 namespace DEVinCar.Domain.DTOs{
     public class UserDTO{
