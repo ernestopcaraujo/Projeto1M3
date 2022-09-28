@@ -1,7 +1,7 @@
 
 using DEVinCar.Api.Data;
 using DEVinCar.Domain.DTOs;
-using DEVinCar.Api.Models;
+using DEVinCar.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DEVinCar.Api.Controllers;

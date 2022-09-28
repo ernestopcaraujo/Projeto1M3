@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using DEVinCar.Api.Data;
 using DEVinCar.Domain.DTOs;
-using DEVinCar.Api.Models;
+using DEVinCar.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DEVinCar.Api.ViewModels;

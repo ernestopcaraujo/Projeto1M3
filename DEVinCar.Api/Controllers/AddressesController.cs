@@ -1,4 +1,4 @@
-﻿using DEVinCar.Api.Models;
+﻿using DEVinCar.Domain.Models;
 using DEVinCar.Api.Data;
 using DEVinCar.Domain.DTOs;
 using Microsoft.EntityFrameworkCore;
