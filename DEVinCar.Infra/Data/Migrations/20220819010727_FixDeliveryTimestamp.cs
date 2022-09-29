@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DEVinCar.Api.Data.Migrations
+namespace DEVinCar.Infra.Data.Migrations
 {
     public partial class FixDeliveryTimestamp : Migration
     {
