@@ -14,8 +14,6 @@ public class DevInCarDbContext : DbContext
         _configuration = configuration;
     }
 
-    //public DbSet<XYZ> XYZs { get; set; }
-
     public DbSet<City> Cities { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Car> Cars { get; set; }

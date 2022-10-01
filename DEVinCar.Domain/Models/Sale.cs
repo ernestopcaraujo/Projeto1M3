@@ -1,4 +1,6 @@
-﻿namespace DEVinCar.Domain.Models
+﻿using DEVinCar.Domain.DTOs;
+
+namespace DEVinCar.Domain.Models
 {
     public class Sale
     {
@@ -13,5 +15,19 @@
         public Sale()
         {
         }
+
+        public Sale(SaleDTO saleDTO)
+        {
+            SaleDate = saleDTO.SaleDate;
+            BuyerId = saleDTO.BuyerId;                        
+        }
+
+        public Sale(BuyDTO buyDTO)
+        {
+            SaleDate = buyDTO.SaleDate;
+            SellerId = buyDTO.SellerId;
+        }
+        
     }
+    
 }
