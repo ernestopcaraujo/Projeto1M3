@@ -9,7 +9,6 @@ namespace DEVinCar.Domain.Interfaces.Repositories
 {
     public interface IUsersRepository
     {
-        IList<User>GetByNameService(string name, DateTime birthDateMax, DateTime birthDateMin);
         public IQueryable<User> QueryMethod();
         User GetByIdService(int id);
         public User CheckUserByEmail(string email);
