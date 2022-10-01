@@ -1,3 +1,5 @@
+using DEVinCar.Domain.DTOs;
+
 namespace DEVinCar.Domain.Models
 {
     public class User
@@ -19,6 +21,13 @@ namespace DEVinCar.Domain.Models
             Password = password;
             Name = name;
             BirthDate = birthDate;
+        }
+        public User(UserDTO userDTO)
+        {
+            Name = userDTO.Name;
+            Email = userDTO.Email;
+            Password = userDTO.Password;
+            BirthDate = userDTO.BirthDate;
         }
     }
 }

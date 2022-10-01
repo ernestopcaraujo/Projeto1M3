@@ -4,7 +4,6 @@ using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using DEVinCar.Domain.ViewModels;
 
 namespace DEVinCar.Api.Controllers;
 
