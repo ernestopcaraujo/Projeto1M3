@@ -16,11 +16,7 @@ namespace DEVinCar.Infra.Data.Repositories
         {
             _context = context;
         }
-        public IList<User> GetByNameService(string name, DateTime birthDateMax, DateTime birthDateMin)
-        {
-            throw new NotImplementedException();
-        }
-         public IQueryable<User> QueryMethod()
+        public IQueryable<User> QueryMethod()
         {
             return _context.Set<User>().AsQueryable();
         }
