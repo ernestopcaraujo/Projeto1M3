@@ -8,38 +8,17 @@ using DEVinCar.Domain.Models;
 
 namespace DEVinCar.Infra.Data.Repositories
 {
-    public class UsersRepository : IUsersRepository
+    public class UsersRepository : BaseRepository<User,int>, IUsersRepository
     {
 
-        private readonly DevInCarDbContext _context;
-        public UsersRepository(DevInCarDbContext context)
+        public UsersRepository(DevInCarDbContext context) : base(context)
         {
-            _context = context;
-        }
-        public IQueryable<User> QueryMethod()
-        {
-            return _context.Set<User>().AsQueryable();
-        }
-        public User GetByIdService(int id)
-        {
-            var user = _context.Users.Find(id);
-            return (user);
+            
         }
         public User CheckUserByEmail (string email)
         {
             var checkedUser = _context.Users.FirstOrDefault(u => u.Email == email);
             return(checkedUser);
-        }
-        public void InsertUser(User newUser)
-        {
-            _context.Users.Add(newUser);
-            _context.SaveChanges();
-        }
-
-        public void RemoveUser(User userRemoved)
-        {
-            _context.Users.Remove(userRemoved);
-            _context.SaveChanges();
         }
     }
 }
