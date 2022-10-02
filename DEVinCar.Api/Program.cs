@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DevInCarDbContext>();
-builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
+builder.Services.AddScoped<ILoginService,LoginService>();
 builder.Services.AddScoped<IDeliveryService,DeliveryService>();
 builder.Services.AddScoped<ISalesService,SalesService>();
 builder.Services.AddScoped<IUsersService,UsersService>();
