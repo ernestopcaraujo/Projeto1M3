@@ -1,5 +1,14 @@
 using System.Text.Json.Serialization;
 using DEVinCar.Infra.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using DEVinCar.Api.Security;
+using System.Text;
+using DEVinCar.Domain.Interfaces;
+using DEVinCar.Domain.Services;
+using DEVinCar.Domain.Interfaces.Services;
+using DEVinCar.Domain.DTOs;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +16,29 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DevInCarDbContext>();
+builder.Services.AddScoped<IAuthenticationService,AuthenticationService>();
+builder.Services.AddScoped<IDeliveryService,DeliveryService>();
+builder.Services.AddScoped<ISalesService,SalesService>();
+builder.Services.AddScoped<IUsersService,UsersService>();
+
+var key = Encoding.ASCII.GetBytes(Settings.Secret);
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 var app = builder.Build();
 
@@ -20,6 +52,7 @@ if (app.Environment.IsDevelopment())
 // comentando para conseguir trabalhar com Insomnia/Postman via http comum
 //app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
