@@ -14,6 +14,7 @@ namespace DEVinCar.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    
     public class LoginController : ControllerBase
     {
         private readonly ILoginService _loginService;
@@ -24,6 +25,7 @@ namespace DEVinCar.Api.Controllers
 
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public IActionResult Login ([FromBody] LoginDTO loginDTO)
         {
             var incomingUser = _loginService.CheckUser(loginDTO);
@@ -71,6 +73,7 @@ namespace DEVinCar.Api.Controllers
 
         [HttpGet]
         [Route("list-refresh-tokens")]
+        [AllowAnonymous]
         public IActionResult ListRefreshTokens(){
             return Ok(TokenService.GetAllRefreshTokens());
         }

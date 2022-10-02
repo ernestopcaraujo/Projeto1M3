@@ -3,6 +3,7 @@ using DEVinCar.Infra.Data;
 using DEVinCar.Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using DEVinCar.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -20,6 +21,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public ActionResult<List<User>> Get(
        [FromQuery] string name,
        [FromQuery] DateTime birthDateMax,
@@ -37,6 +39,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public ActionResult<User> GetById(
         [FromRoute] int id
     )
@@ -52,6 +55,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{userId}/buy")]
+    [Authorize]
     public ActionResult <List<Sale>> GetByIdBuy(
        [FromRoute] int userId)
 
@@ -67,6 +71,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{userId}/sales")]
+    [Authorize]
     public ActionResult<Sale> GetSalesBySellerId(
        [FromRoute] int userId)
     {
@@ -81,6 +86,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public ActionResult Post(
         [FromBody] UserDTO userDTO
     )
@@ -92,6 +98,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{userId}/sales")]
+    [Authorize]
     public ActionResult<Sale> PostSaleUserId(
            [FromRoute] int userId,
            [FromBody] SaleDTO saleDTO)
@@ -111,7 +118,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{userId}/buy")]
-
+    [Authorize]
    public ActionResult<Sale> PostBuyUserId(
           [FromRoute] int userId,
           [FromBody] BuyDTO buyDTO)
@@ -125,6 +132,7 @@ public class UsersController : ControllerBase
       
 
     [HttpDelete("{userId}")]
+    [Authorize]
     public ActionResult Delete(
        [FromRoute] int userId
    )

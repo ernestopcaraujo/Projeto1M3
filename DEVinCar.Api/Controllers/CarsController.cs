@@ -3,7 +3,7 @@ using DEVinCar.Infra.Data;
 using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
 namespace DEVinCar.Api.Controllers;
 
 [ApiController]
@@ -18,6 +18,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet("{carId}")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult<Car> GetById([FromRoute] int carId)
     {
         var car = _context.Cars.Find(carId);
@@ -26,6 +27,7 @@ public class CarController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Gerente")]
     public ActionResult<List<Car>> Get(
         [FromQuery] string name,
         [FromQuery] decimal? priceMin,
@@ -57,6 +59,7 @@ public class CarController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Gerente")]
     public ActionResult<Car> Post(
         [FromBody] CarDTO body
     )
@@ -76,6 +79,7 @@ public class CarController : ControllerBase
     }
 
     [HttpDelete("{carId}")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult Delete([FromRoute] int carId)
     {
         var car = _context.Cars.Find(carId);
@@ -94,6 +98,7 @@ public class CarController : ControllerBase
     }
 
     [HttpPut("{carId}")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult<Car> Put([FromBody] CarDTO carDto, [FromRoute] int carId)
     {
         var car = _context.Cars.Find(carId);

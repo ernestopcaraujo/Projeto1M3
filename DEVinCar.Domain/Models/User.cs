@@ -1,4 +1,5 @@
 using DEVinCar.Domain.DTOs;
+using DEVinCar.Domain.Enum;
 
 namespace DEVinCar.Domain.Models
 {
@@ -9,7 +10,7 @@ namespace DEVinCar.Domain.Models
         public string Password { get; set; }
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
-        public string Role {get; set;}
+        public Permissions Role {get; set;}
 
         public User()
         {
