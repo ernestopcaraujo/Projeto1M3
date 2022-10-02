@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Runtime.ConstrainedExecution;
 using DEVinCar.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVinCar.Api.Controllers
 {
@@ -19,6 +20,7 @@ namespace DEVinCar.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult <List<Delivery>> Get(
         [FromQuery] int addressId,
         [FromQuery] int saleId)

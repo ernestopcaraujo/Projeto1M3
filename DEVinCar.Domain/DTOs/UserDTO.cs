@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using DEVinCar.Domain.Annotations;
+using DEVinCar.Domain.Enum;
 using DEVinCar.Domain.Models;
 
 namespace DEVinCar.Domain.DTOs{
@@ -20,6 +21,11 @@ namespace DEVinCar.Domain.DTOs{
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         [CheckAgeAttribute(18)]
         public DateTime BirthDate { get; set; }
+        
+        [Required(ErrorMessage = "The role is required")]
+        [MaxLength(8)]
+        public Permissions Role {get; set;}
+
         public UserDTO()
         {
             

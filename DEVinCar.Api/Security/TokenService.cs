@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using DEVinCar.Domain.Models;
 using DEVinCar.Api.Security;
 using System.Security.Cryptography;
+using Microsoft.OpenApi.Extensions;
 
 public static class TokenService
     {
@@ -14,7 +15,7 @@ public static class TokenService
              {
                     new Claim(ClaimTypes.Name, incomingUser.Name),
                     new Claim(ClaimTypes.Email, incomingUser.Email),
-                    new Claim(ClaimTypes.Role, incomingUser.Role)
+                    new Claim(ClaimTypes.Role, incomingUser.Role.GetDisplayName())
              };
 
             return GenerateTokenFromClaims(claims);
