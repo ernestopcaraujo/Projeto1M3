@@ -7,16 +7,11 @@ using DEVinCar.Domain.Models;
 
 namespace DEVinCar.Infra.Data.Repositories
 {
-    public class DeliveryRepository : IDeliveryRepository
+    public class DeliveryRepository : BaseRepository<Delivery,int>,IDeliveryRepository
     {
-        private readonly DevInCarDbContext _context;
-        public DeliveryRepository(DevInCarDbContext context)
+        public DeliveryRepository(DevInCarDbContext context) : base(context)
         {
-            _context = context;
-        }
-        public IQueryable <Delivery> QueryMethod()
-        {
-            return _context.Set<Delivery>().AsQueryable();
+            
         }
     }
 }

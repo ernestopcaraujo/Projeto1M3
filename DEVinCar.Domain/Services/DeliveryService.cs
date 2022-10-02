@@ -18,7 +18,7 @@ namespace DEVinCar.Domain.Services
         }
         public List<Delivery> GetDelivery(int? addressId, int? saleId)
         {
-            var query = _deliveryRepository.QueryMethod();
+            var query = _deliveryRepository.QueryBase();
 
             if (addressId.HasValue)
             {

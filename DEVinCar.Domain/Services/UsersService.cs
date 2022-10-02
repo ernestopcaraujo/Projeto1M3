@@ -24,7 +24,7 @@ namespace DEVinCar.Domain.Services
 
         public IList<User> GetByNameService(string name, DateTime? birthDateMax, DateTime? birthDateMin)
         {
-            var query = _usersRepository.QueryMethod();
+            var query = _usersRepository.QueryBase();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -45,7 +45,7 @@ namespace DEVinCar.Domain.Services
         }
         public User GetByIdService(int id)
         {
-            var user = _usersRepository.GetByIdService(id);
+            var user = _usersRepository.GetByIdBase(id);
             return (user);
         }
 
@@ -68,13 +68,13 @@ namespace DEVinCar.Domain.Services
                 throw new AlreadyExistsException("This user already exists !");
             }
 
-            _usersRepository.InsertUser(newUser);
+            _usersRepository.InsertBase(newUser);
 
         }
 
         public void RemoveUser(int userId)
         {
-            var userRemoved = _usersRepository.GetByIdService(userId);
+            var userRemoved = _usersRepository.GetByIdBase(userId);
 
             if (userRemoved == null)
             {
