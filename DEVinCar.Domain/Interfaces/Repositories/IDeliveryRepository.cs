@@ -8,6 +8,6 @@ namespace DEVinCar.Domain.Interfaces.Repositories
 {
     public interface IDeliveryRepository
     {
-        public IQueryable <Delivery> QueryMethod();
+        public IQueryable <Delivery> QueryBase();
     }
 }

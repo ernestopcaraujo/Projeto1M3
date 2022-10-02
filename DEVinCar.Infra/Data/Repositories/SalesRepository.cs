@@ -9,13 +9,13 @@ namespace DEVinCar.Infra.Data.Repositories
 {
 
     
-    public class SalesRepository : ISalesRepository
+    public class SalesRepository : BaseRepository<Sale,int>,ISalesRepository
     {
 
-        private readonly DevInCarDbContext _context;
-        public SalesRepository(DevInCarDbContext context)
+        
+        public SalesRepository(DevInCarDbContext context) : base(context)
         {
-            _context = context;
+            
         }
         
         public IList<Sale> GetByIdBuyService(int userId)
@@ -28,16 +28,6 @@ namespace DEVinCar.Infra.Data.Repositories
             var sales = _context.Sales.Where(s => s.SellerId == userId);
             return (sales.ToList());
         }
-        public void InsertSale(Sale sale)
-        {
-            _context.Sales.Add(sale);
-            _context.SaveChanges();
 
-        }
-        public void InsertBuy(Sale sale)
-        {
-            _context.Sales.Add(sale);
-            _context.SaveChanges();
-        }
     }
 }

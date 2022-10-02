@@ -40,7 +40,7 @@ namespace DEVinCar.Domain.Services
                 sale.SaleDate = DateTime.Now;
             }
 
-            _salesRepository.InsertSale(sale);
+            _salesRepository.InsertBase(sale);
         }
         
         public void InsertBuy(Sale sale)
@@ -64,7 +64,7 @@ namespace DEVinCar.Domain.Services
                 sale.SaleDate = DateTime.Now;
             }
 
-            _salesRepository.InsertSale(sale);
+            _salesRepository.InsertBase(sale);
         }
     }
 }

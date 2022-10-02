@@ -10,7 +10,6 @@ namespace DEVinCar.Domain.Interfaces.Repositories
     {
         IList<Sale> GetByIdBuyService(int id);
         IList<Sale> GetSalesBySellerIdService(int userId);
-        void InsertSale(Sale sale);
-        void InsertBuy(Sale sale);
+        void InsertBase(Sale sale);
     }
 }
