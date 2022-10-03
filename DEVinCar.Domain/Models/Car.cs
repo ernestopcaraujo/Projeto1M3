@@ -1,4 +1,6 @@
-﻿namespace DEVinCar.Domain.Models
+﻿using DEVinCar.Domain.DTOs;
+
+namespace DEVinCar.Domain.Models
 {
     public class Car
     {
@@ -14,6 +16,12 @@
             Id = id;
             Name = name;
             SuggestedPrice = suggestedPrice;
+        }
+
+        public Car(CarDTO carDTO)
+        {
+            Name = carDTO.Name;
+            SuggestedPrice = carDTO.SuggestedPrice;
         }
     }
 }

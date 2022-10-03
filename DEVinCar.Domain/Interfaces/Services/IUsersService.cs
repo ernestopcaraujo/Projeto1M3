@@ -13,8 +13,8 @@ namespace DEVinCar.Domain.Interfaces.Services
         User GetByIdService(int id);
         IList<Sale> GetByIdBuyService(int userId);
         IList<Sale> GetSalesBySellerIdService(int userId);
-        void InsertUser(User newUser);
         void RemoveUser(int userId);
+        void InsertUser(User newUser);
 
     }
 }

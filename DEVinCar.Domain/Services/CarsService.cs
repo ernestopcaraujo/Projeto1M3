@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Exceptions;
 using DEVinCar.Domain.Interfaces.Repositories;
+using DEVinCar.Domain.Interfaces.Services;
 using DEVinCar.Domain.Models;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace DEVinCar.Domain.Services
 {
-    public class CarsService
+    public class CarsService : ICarsService
     {
         private readonly ICarsRepository _carsRepository;
         private readonly IMemoryCache _cache;
@@ -33,5 +35,49 @@ namespace DEVinCar.Domain.Services
             }
             return (car);
         }
-    }
+
+        public List<Car> GetList(string name, decimal? priceMin, decimal? priceMax)
+        {
+             var query = _carsRepository.QueryBase();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(c => c.Name.Contains(name));
+            }
+
+            if (priceMin > priceMax)
+            {
+                throw new IncompatibleValuesException("The minimum price is higer than maximum price !");
+            }
+
+            if (priceMin.HasValue)
+            {
+                query = query.Where(c => c.SuggestedPrice >= priceMin);
+            }
+
+            if (priceMax.HasValue)
+            {
+                query = query.Where(c => c.SuggestedPrice <= priceMax);
+            }
+
+            if (!query.ToList().Any())
+            {
+                throw new NotExistsException("This query has no result !");
+            }
+
+            return query.ToList();
+        }
+        public void InsertCar(Car newCar)
+        {
+            var checkedCar = _carsRepository.CheckCar(newCar);
+
+            if (checkedCar == true)
+            {
+                throw new IncompatibleValuesException("Car price is not right or the car already exists !");
+            }
+        
+            _carsRepository.InsertBase(newCar);
+
+        }
+    }    
 }
