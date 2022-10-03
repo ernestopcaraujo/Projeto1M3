@@ -22,7 +22,6 @@ namespace DEVinCar.Domain.Services
         public Car GetById(int id){
 
             Car car = _carsRepository.GetByIdBase(id);
-
             if (car == null)
             {
                 throw new NotExistsException("This car does not exists !");
@@ -32,7 +31,6 @@ namespace DEVinCar.Domain.Services
                 car = _carsRepository.GetByIdBase(id);
                 _cache.Set($"car:{id}", car, new TimeSpan(0,10,0));
             }
-
             return (car);
         }
     }
