@@ -36,6 +36,7 @@ namespace DEVinCar.Domain.DTOs{
             Email = user.Email;
             Password = user.Password;
             BirthDate = user.BirthDate;
+            Role = user.Role;
         }
 
     }
