@@ -4,6 +4,9 @@ using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
+using DEVinCar.Domain.Interfaces.Services;
+
 namespace DEVinCar.Api.Controllers;
 
 [ApiController]
@@ -11,18 +14,22 @@ namespace DEVinCar.Api.Controllers;
 public class CarController : ControllerBase
 {
     private readonly DevInCarDbContext _context;
+    private readonly IMemoryCache _cache;
+    private readonly ICarsService _carsService;
 
-    public CarController(DevInCarDbContext context)
+    public CarController(DevInCarDbContext context,ICarsService carsService,IMemoryCache cache)
     {
         _context = context;
+        _carsService = carsService;
+        _cache = cache;
     }
+
 
     [HttpGet("{carId}")]
     [Authorize(Roles = "Gerente")]
     public ActionResult<Car> GetById([FromRoute] int carId)
     {
-        var car = _context.Cars.Find(carId);
-        if (car == null) return NotFound();
+        var car = _carsService.GetById(carId);
         return Ok(car);
     }
 

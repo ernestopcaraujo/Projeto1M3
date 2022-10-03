@@ -9,6 +9,7 @@ using DEVinCar.Domain.Services;
 using DEVinCar.Domain.Interfaces.Services;
 using DEVinCar.Domain.DTOs;
 using Microsoft.AspNetCore.Authentication;
+using DEVinCar.Api.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddScoped<ILoginService,LoginService>();
 builder.Services.AddScoped<IDeliveryService,DeliveryService>();
 builder.Services.AddScoped<ISalesService,SalesService>();
 builder.Services.AddScoped<IUsersService,UsersService>();
+builder.Services.AddMemoryCache();
 
 var key = Encoding.ASCII.GetBytes(Settings.Secret);
 
@@ -56,5 +58,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseMiddleware<ErrorMiddleware>();
 
 app.Run();
