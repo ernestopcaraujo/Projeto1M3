@@ -10,6 +10,7 @@ using DEVinCar.Domain.Interfaces.Services;
 using DEVinCar.Domain.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using DEVinCar.Api.Config;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,15 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = false
     };
 });
+
+builder.Services.AddMvc(config =>
+    {
+        config.ReturnHttpNotAcceptable = true;
+        config.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+        config.InputFormatters.Add(new XmlSerializerInputFormatter(config));
+
+    });
+
 
 var app = builder.Build();
 
