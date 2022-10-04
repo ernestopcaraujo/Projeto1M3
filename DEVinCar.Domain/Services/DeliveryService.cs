@@ -32,7 +32,7 @@ namespace DEVinCar.Domain.Services
                       
             if (!query.ToList().Any())
             {
-                throw new NoDeliveryFoundException("No Delivery found !");
+                throw new NotFoundException("No Delivery found !");
             }
 
             return query.ToList();

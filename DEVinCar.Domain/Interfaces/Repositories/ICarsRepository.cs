@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DEVinCar.Domain.DTOs;
 using DEVinCar.Domain.Models;
 
@@ -13,5 +9,9 @@ namespace DEVinCar.Domain.Interfaces.Repositories
         public IQueryable<Car> QueryBase();
         void InsertBase (Car newCar);
         bool CheckCar(Car newCar);
+        void RemoveBase (Car carRemove);
+        bool CheckCarName(CarDTO carDTO, int carId);
+        void UpdateCar(CarDTO carDTO, int carId);
+        
     }
 }
