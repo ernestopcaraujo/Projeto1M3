@@ -16,12 +16,14 @@ public class CarController : ControllerBase
     private readonly DevInCarDbContext _context;
     private readonly IMemoryCache _cache;
     private readonly ICarsService _carsService;
+    private readonly ISalesService _salesService;
 
-    public CarController(DevInCarDbContext context,ICarsService carsService,IMemoryCache cache)
+    public CarController(DevInCarDbContext context,ICarsService carsService,IMemoryCache cache, ISalesService salesService)
     {
         _context = context;
         _carsService = carsService;
         _cache = cache;
+        _salesService = salesService;
     }
 
 
@@ -50,7 +52,7 @@ public class CarController : ControllerBase
     [HttpPost]
     [Authorize(Roles = "Gerente")]
     public ActionResult<Car> Post(
-        [FromBody] CarDTO carDTO
+    [FromBody] CarDTO carDTO
     )
     {
         var newCar = new Car(carDTO);     
@@ -64,42 +66,16 @@ public class CarController : ControllerBase
     [Authorize(Roles = "Gerente")]
     public ActionResult Delete([FromRoute] int carId)
     {
-        var car = _context.Cars.Find(carId);
-        var soldCar = _context.SaleCars.Any(s => s.CarId == carId);
-        if (car == null)
-        {
-            return NotFound();
-        }
-        if (soldCar)
-        {
-            return BadRequest();
-        }
-        _context.Remove(car);
-        _context.SaveChanges();
-        return NoContent();
+        _carsService.RemoveCar(carId);
+        
+       return NoContent();
     }
 
     [HttpPut("{carId}")]
     [Authorize(Roles = "Gerente")]
     public ActionResult<Car> Put([FromBody] CarDTO carDto, [FromRoute] int carId)
     {
-        var car = _context.Cars.Find(carId);
-        var name = _context.Cars.Any(c => c.Name == carDto.Name && c.Id != carId);
-
-
-        if (car == null)
-            return NotFound();
-        if (carDto.Name.Equals(null) || carDto.SuggestedPrice.Equals(null))
-            return BadRequest();
-        if (carDto.SuggestedPrice <= 0)
-            return BadRequest();
-        if (name)
-            return BadRequest();
-
-        car.Name = carDto.Name;
-        car.SuggestedPrice = carDto.SuggestedPrice;
-
-        _context.SaveChanges();
-        return NoContent();
+        _carsService.PutCar(carDto,carId);
+        return Ok();
     }
 }

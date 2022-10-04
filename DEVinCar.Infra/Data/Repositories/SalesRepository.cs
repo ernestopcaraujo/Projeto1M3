@@ -28,6 +28,12 @@ namespace DEVinCar.Infra.Data.Repositories
             var sales = _context.Sales.Where(s => s.SellerId == userId);
             return (sales.ToList());
         }
+        public bool CheckSoldCar(int carId)
+        {
+            var checkedSoldCar = _context.SaleCars.Any(s => s.CarId == carId);
+
+            return(checkedSoldCar);
+        }
 
     }
 }

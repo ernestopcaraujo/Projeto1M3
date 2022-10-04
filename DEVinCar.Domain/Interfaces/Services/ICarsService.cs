@@ -12,5 +12,8 @@ namespace DEVinCar.Domain.Interfaces.Services
         Car GetById (int carId);
         List<Car> GetList (string name, decimal? priceMin, decimal? priceMax );
         void InsertCar(Car newCar);
+        void RemoveCar(int carId);
+        void PutCar (CarDTO carDTO, int carId);
+        
     }
 }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace DEVinCar.Domain.Exceptions
 {
-    public class NoDeliveryFoundException : Exception
+    public class NotFoundException : Exception
     {
-        public NoDeliveryFoundException(string message) : base(message)
+        public NotFoundException(string message) : base(message)
         {
             
         }

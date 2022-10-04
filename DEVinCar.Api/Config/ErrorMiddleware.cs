@@ -42,12 +42,16 @@ namespace DEVinCar.Api.Config
                     status = HttpStatusCode.NoContent;
                     message = ex.Message;
                     break;
-                case NoDeliveryFoundException: 
+                case NotFoundException: 
                     status = HttpStatusCode.NotFound;
                     message = ex.Message;
                     break;
                 case InvalidLoginException: 
                     status = HttpStatusCode.Unauthorized;
+                    message = ex.Message;
+                    break;
+                case IncompatibleValuesException: 
+                    status = HttpStatusCode.NotAcceptable;
                     message = ex.Message;
                     break;    
                 default:
