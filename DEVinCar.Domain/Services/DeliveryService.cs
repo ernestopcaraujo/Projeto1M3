@@ -39,9 +39,5 @@ namespace DEVinCar.Domain.Services
             
         }
 
-        public List<Delivery> GetDelivery(int addressId, int saleId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

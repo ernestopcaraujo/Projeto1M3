@@ -30,6 +30,13 @@ namespace DEVinCar.Infra.Data.Repositories
             return(carCheckedName);
         }
 
+        public IQueryable<Car> QueryCar()
+        {
+            var query = _context.Cars.Select(x=>x);
+
+            return query;
+        }
+
         public void UpdateCar(CarDTO carDTO, int carId)
         {
             var carUpdated = _context.Cars.FirstOrDefault(c=>c.Id == carId);
@@ -37,6 +44,8 @@ namespace DEVinCar.Infra.Data.Repositories
             carUpdated.SuggestedPrice = carDTO.SuggestedPrice;
             _context.SaveChanges();
         }
+
+    
     }
 
 }

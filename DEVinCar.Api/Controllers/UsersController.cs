@@ -21,26 +21,19 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
-    public ActionResult<List<User>> Get(
+    //[Authorize]
+    public IActionResult Get(
        [FromQuery] string name,
        [FromQuery] DateTime birthDateMax,
        [FromQuery] DateTime birthDateMin)
     {
         var user = _usersService.GetByNameService(name,birthDateMax,birthDateMin);
-        var userDTO = user.Select(x=>new UserDTO(x));
-
-        if (!userDTO.Any())
-        {
-            return NoContent();
-        }
-        
-        return Ok(userDTO);
+        return Ok(user.ToList());
     }
 
     [HttpGet("{id}")]
-    [Authorize]
-    public ActionResult<User> GetById(
+    //[Authorize]
+    public IActionResult GetById(
         [FromRoute] int id
     )
     {
@@ -55,8 +48,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{userId}/buy")]
-    [Authorize]
-    public ActionResult <List<Sale>> GetByIdBuy(
+    //[Authorize]
+    public IActionResult GetByIdBuy(
        [FromRoute] int userId)
 
     {
@@ -71,8 +64,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{userId}/sales")]
-    [Authorize]
-    public ActionResult<Sale> GetSalesBySellerId(
+    //[Authorize]
+    public IActionResult GetSalesBySellerId(
        [FromRoute] int userId)
     {
         var sales = _usersService.GetSalesBySellerIdService(userId);
@@ -86,8 +79,8 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
-    public ActionResult Post(
+    //[Authorize]
+    public IActionResult Post(
         [FromBody] UserDTO userDTO
     )
     {
@@ -98,18 +91,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{userId}/sales")]
-    [Authorize]
+    //[Authorize]
     public ActionResult<Sale> PostSaleUserId(
            [FromRoute] int userId,
            [FromBody] SaleDTO saleDTO)
     {
-        // if(_context.Sales.Any(s=>s.BuyerId == 0 || body.BuyerId == 0))
-        // {
-        //      return BadRequest();
-        //  }  
-        //  A validação acima foi eliminada em favor da validação já existente na
-        //  annotation da classe SaleDTO.cs
-
         var sale = new Sale(saleDTO);
         sale.SellerId = userId;
         _salesService.InsertSale(sale);
@@ -118,7 +104,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{userId}/buy")]
-    [Authorize]
+    //[Authorize]
    public ActionResult<Sale> PostBuyUserId(
           [FromRoute] int userId,
           [FromBody] BuyDTO buyDTO)
@@ -132,13 +118,13 @@ public class UsersController : ControllerBase
       
 
     [HttpDelete("{userId}")]
-    [Authorize]
+    //[Authorize]
     public ActionResult Delete(
        [FromRoute] int userId
    )
     {
         _usersService.RemoveUser(userId);
-        return NoContent();
+        return Ok();
     }
 }
 

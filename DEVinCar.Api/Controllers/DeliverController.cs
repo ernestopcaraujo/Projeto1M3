@@ -20,7 +20,7 @@ namespace DEVinCar.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public ActionResult <List<Delivery>> Get(
         [FromQuery] int addressId,
         [FromQuery] int saleId)
@@ -28,7 +28,7 @@ namespace DEVinCar.Api.Controllers
             var query = _deliveryService.GetDelivery(addressId, saleId);
             var queryDTO = query.Select(x=>new DeliveryDTO(x));
             
-            return Ok(query.ToList());
+            return Ok(queryDTO.ToList());
        
         }
     }

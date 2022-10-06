@@ -24,7 +24,7 @@ namespace DEVinCar.Domain.Services
 
         public IList<User> GetByNameService(string name, DateTime? birthDateMax, DateTime? birthDateMin)
         {
-            var query = _usersRepository.QueryBase();
+            var query = _usersRepository.QueryUser();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -34,6 +34,7 @@ namespace DEVinCar.Domain.Services
             if (birthDateMin.HasValue)
             {
                 query = query.Where(c => c.BirthDate >= birthDateMin.Value);
+
             }
 
             if (birthDateMax.HasValue)
@@ -41,8 +42,18 @@ namespace DEVinCar.Domain.Services
                 query = query.Where(c => c.BirthDate <= birthDateMax.Value);
             }
 
+            if (query.Count()==0)
+            {
+                throw new NotExistsException("No data found !");
+            }
+            
             return query.ToList();
         }
+
+
+
+
+
         public User GetByIdService(int id)
         {
             var user = _usersRepository.GetByIdBase(id);
@@ -80,6 +91,9 @@ namespace DEVinCar.Domain.Services
             {
                 throw new NotExistsException("This user does not exists !");
             }
+
+            _usersRepository.RemoveBase(userRemoved);
+
         }
     }
 }

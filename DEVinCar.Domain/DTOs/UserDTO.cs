@@ -22,9 +22,9 @@ namespace DEVinCar.Domain.DTOs{
         [CheckAgeAttribute(18)]
         public DateTime BirthDate { get; set; }
         
-        [Required(ErrorMessage = "The role is required")]
-        [MaxLength(8)]
-        public Permissions Role {get; set;}
+        //[Required(ErrorMessage = "The role is required")]
+        //[MaxLength(8)]
+        //public Permissions Role {get; set;}
 
         public UserDTO()
         {
@@ -36,7 +36,7 @@ namespace DEVinCar.Domain.DTOs{
             Email = user.Email;
             Password = user.Password;
             BirthDate = user.BirthDate;
-            Role = user.Role;
+            //Role = user.Role;
         }
 
     }

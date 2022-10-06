@@ -11,17 +11,17 @@ namespace DEVinCar.Domain.Models
         public Car ()
         {
         }
+        public Car(CarDTO carDTO)
+        {
+            Name = carDTO.Name;
+            SuggestedPrice = carDTO.SuggestedPrice;
+        }
+
         public Car(int id, string name, decimal suggestedPrice)
         {
             Id = id;
             Name = name;
             SuggestedPrice = suggestedPrice;
-        }
-
-        public Car(CarDTO carDTO)
-        {
-            Name = carDTO.Name;
-            SuggestedPrice = carDTO.SuggestedPrice;
         }
     }
 }

@@ -35,47 +35,49 @@ namespace DEVinCar.Api.Controllers
                 return Unauthorized();
             }
 
-            var token = TokenService.GenerateTokenFromUser(incomingUser);
-            var refreshToken = TokenService.GenerateRefreshToken();
-            TokenService.SaveRefreshToken(incomingUser.Name, refreshToken);
+            // var token = TokenService.GenerateTokenFromUser(incomingUser);
+            // var refreshToken = TokenService.GenerateRefreshToken();
+            // TokenService.SaveRefreshToken(incomingUser.Name, refreshToken);
 
-            return Ok(new {
-                token,
-                refreshToken
-            });
+            // return Ok(new {
+            //     token,
+            //     refreshToken
+            // });
+
+            return Ok();
         }
         
-        [HttpPost]
-        [Route("refresh")]
-        [AllowAnonymous]
-        public IActionResult RefreshToken([FromQuery] string token, [FromQuery] string refreshToken)
-        {
-            var principal = TokenService.GetPrincipalFromExpiredToken(token);
-            var username = principal.Identity.Name;
-            var savedRefreshToken = TokenService.GetRefreshToken(username);
+        // [HttpPost]
+        // [Route("refresh")]
+        // [AllowAnonymous]
+        // public IActionResult RefreshToken([FromQuery] string token, [FromQuery] string refreshToken)
+        // {
+        //     var principal = TokenService.GetPrincipalFromExpiredToken(token);
+        //     var username = principal.Identity.Name;
+        //     var savedRefreshToken = TokenService.GetRefreshToken(username);
 
-            if (savedRefreshToken != refreshToken)
-                throw new SecurityTokenException("Invalid refresh token");
+        //     if (savedRefreshToken != refreshToken)
+        //         throw new SecurityTokenException("Invalid refresh token");
 
-            var newToken = TokenService.GenerateTokenFromClaims(principal.Claims);
-            var newRefreshToken = TokenService.GenerateRefreshToken();
-            TokenService.DeleteRefreshToken(username, refreshToken);
-            TokenService.SaveRefreshToken(username, newRefreshToken);
+        //     var newToken = TokenService.GenerateTokenFromClaims(principal.Claims);
+        //     var newRefreshToken = TokenService.GenerateRefreshToken();
+        //     TokenService.DeleteRefreshToken(username, refreshToken);
+        //     TokenService.SaveRefreshToken(username, newRefreshToken);
 
-            return new ObjectResult(new
-            {
-                token = newToken,
-                refreshToken = newRefreshToken
+        //     return new ObjectResult(new
+        //     {
+        //         token = newToken,
+        //         refreshToken = newRefreshToken
                 
-            });
+        //     });
 
-        }
+        // }
 
-        [HttpGet]
-        [Route("list-refresh-tokens")]
-        [AllowAnonymous]
-        public IActionResult ListRefreshTokens(){
-            return Ok(TokenService.GetAllRefreshTokens());
-        }
+        // [HttpGet]
+        // [Route("list-refresh-tokens")]
+        // [AllowAnonymous]
+        // public IActionResult ListRefreshTokens(){
+        //     return Ok(TokenService.GetAllRefreshTokens());
+        // }
     }
 }

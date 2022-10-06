@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using DEVinCar.Infra.Data;
+using DEVinCar.Infra.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using DEVinCar.Api.Security;
@@ -11,6 +12,7 @@ using DEVinCar.Domain.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using DEVinCar.Api.Config;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using DEVinCar.Domain.Interfaces.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,10 +20,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DevInCarDbContext>();
+
 builder.Services.AddScoped<ILoginService,LoginService>();
-builder.Services.AddScoped<IDeliveryService,DeliveryService>();
-builder.Services.AddScoped<ISalesService,SalesService>();
+builder.Services.AddScoped<ILoginRepository,LoginRepository>();
+
+builder.Services.AddScoped<ICarsService,CarsService>();
+builder.Services.AddScoped<ICarsRepository,CarsRepository>();
+
 builder.Services.AddScoped<IUsersService,UsersService>();
+builder.Services.AddScoped<IUsersRepository,UsersRepository>();
+
+builder.Services.AddScoped<IDeliveryService,DeliveryService>();
+builder.Services.AddScoped<IDeliveryRepository,DeliveryRepository>();
+
+builder.Services.AddScoped<ISalesService,SalesService>();
+builder.Services.AddScoped<ISalesRepository,SalesRepository>();
+
+
 builder.Services.AddMemoryCache();
 
 var key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -46,11 +61,12 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddMvc(config =>
     {
         config.ReturnHttpNotAcceptable = true;
-        config.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-        config.InputFormatters.Add(new XmlSerializerInputFormatter(config));
+        // config.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+        // config.InputFormatters.Add(new XmlSerializerInputFormatter(config));
+        config.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+        config.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(config));
 
     });
-
 
 var app = builder.Build();
 
@@ -68,6 +84,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseMiddleware<ErrorMiddleware>();
+//app.UseMiddleware<ErrorMiddleware>();
 
 app.Run();

@@ -35,5 +35,20 @@ namespace DEVinCar.Infra.Data.Repositories
             return(checkedSoldCar);
         }
 
+        public bool GetBuyerId(int buyerId)
+        {
+            var checkedBuyerId = _context.Sales.Any(s => s.BuyerId == buyerId);
+
+            return(checkedBuyerId);
+        }
+
+        public bool GetSellerId(int sellerId)
+        {
+            var checkedSellerId = _context.Sales.Any(s => s.SellerId == sellerId);
+
+            return(checkedSellerId);
+        }
+
+
     }
 }

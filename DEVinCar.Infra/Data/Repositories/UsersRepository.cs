@@ -20,5 +20,12 @@ namespace DEVinCar.Infra.Data.Repositories
             var checkedUser = _context.Users.FirstOrDefault(u => u.Email == email);
             return(checkedUser);
         }
+
+        public IQueryable<User> QueryUser()
+        {
+               var query = _context.Set<User>().AsQueryable();
+
+            return query;
+        }
     }
 }

@@ -12,5 +12,8 @@ namespace DEVinCar.Domain.Interfaces.Repositories
         IList<Sale> GetSalesBySellerIdService(int userId);
         void InsertBase(Sale sale);
         bool CheckSoldCar(int carId);
+        bool GetBuyerId(int buyerId);
+        bool GetSellerId(int sellerId);
+
     }
 }

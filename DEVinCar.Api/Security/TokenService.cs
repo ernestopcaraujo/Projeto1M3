@@ -15,7 +15,7 @@ public static class TokenService
              {
                     new Claim(ClaimTypes.Name, incomingUser.Name),
                     new Claim(ClaimTypes.Email, incomingUser.Email),
-                    new Claim(ClaimTypes.Role, incomingUser.Role.GetDisplayName())
+                    //new Claim(ClaimTypes.Role, incomingUser.Role.GetDisplayName())
              };
 
             return GenerateTokenFromClaims(claims);

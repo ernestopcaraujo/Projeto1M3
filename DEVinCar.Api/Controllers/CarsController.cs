@@ -11,16 +11,15 @@ namespace DEVinCar.Api.Controllers;
 
 [ApiController]
 [Route("api/car")]
-public class CarController : ControllerBase
+public class CarsController : ControllerBase
 {
-    private readonly DevInCarDbContext _context;
+    
     private readonly IMemoryCache _cache;
     private readonly ICarsService _carsService;
     private readonly ISalesService _salesService;
 
-    public CarController(DevInCarDbContext context,ICarsService carsService,IMemoryCache cache, ISalesService salesService)
+    public CarsController(ICarsService carsService,IMemoryCache cache, ISalesService salesService)
     {
-        _context = context;
         _carsService = carsService;
         _cache = cache;
         _salesService = salesService;
@@ -28,34 +27,40 @@ public class CarController : ControllerBase
 
 
     [HttpGet("{carId}")]
-    [Authorize(Roles = "Gerente")]
-    public ActionResult<Car> GetById([FromRoute] int carId)
+    //[Authorize(Roles = "Gerente")]
+    public IActionResult GetById([FromRoute] int carId)
     {
         var car = _carsService.GetById(carId);
         return Ok(car);
     }
 
+
     [HttpGet]
-    [Authorize(Roles = "Gerente")]
-    public ActionResult<List<Car>> Get(
+    //[Authorize(Roles = "Gerente")]
+    public ActionResult Get(
         [FromQuery] string name,
         [FromQuery] decimal priceMin,
         [FromQuery] decimal priceMax
     )
     {
         var car = _carsService.GetList(name,priceMin,priceMax);
-        var carDTO = car.Select(c=>new CarDTO(c));
-        return Ok(carDTO);
-        
+        //var carDTO = car.Select(c=>new CarDTO(c));
+        return Ok(car.ToList());
+
     }
 
     [HttpPost]
-    [Authorize(Roles = "Gerente")]
-    public ActionResult<Car> Post(
+    //[Authorize(Roles = "Gerente")]
+    public IActionResult Post(
     [FromBody] CarDTO carDTO
     )
     {
-        var newCar = new Car(carDTO);     
+        var newCar = new Car
+        {
+            Name =carDTO.Name,
+            SuggestedPrice = carDTO.SuggestedPrice,
+        };
+
         _carsService.InsertCar(newCar);
 
         return Created("api/car", newCar.Id);
@@ -63,7 +68,7 @@ public class CarController : ControllerBase
     }
 
     [HttpDelete("{carId}")]
-    [Authorize(Roles = "Gerente")]
+    //[Authorize(Roles = "Gerente")]
     public ActionResult Delete([FromRoute] int carId)
     {
         _carsService.RemoveCar(carId);
@@ -72,7 +77,7 @@ public class CarController : ControllerBase
     }
 
     [HttpPut("{carId}")]
-    [Authorize(Roles = "Gerente")]
+    //[Authorize(Roles = "Gerente")]
     public ActionResult<Car> Put([FromBody] CarDTO carDto, [FromRoute] int carId)
     {
         _carsService.PutCar(carDto,carId);
