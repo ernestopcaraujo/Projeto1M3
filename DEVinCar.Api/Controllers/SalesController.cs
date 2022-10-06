@@ -85,7 +85,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpPost("{saleId}/deliver")]
-    [Authorize(Roles = "Gerente,Vendedor")]
+    [Authorize]
     public ActionResult<DeliveryDTO> PostDeliver(
            [FromRoute] int saleId,
            [FromBody] DeliveryDTO body)

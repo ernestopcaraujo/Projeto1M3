@@ -20,7 +20,7 @@ namespace DEVinCar.Api.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public ActionResult <List<Delivery>> Get(
         [FromQuery] int addressId,
         [FromQuery] int saleId)

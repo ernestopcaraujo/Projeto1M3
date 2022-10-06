@@ -27,5 +27,7 @@ namespace DEVinCar.Infra.Data.Repositories
 
             return query;
         }
+
+        
     }
 }

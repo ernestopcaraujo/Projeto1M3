@@ -21,7 +21,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    //[Authorize]
+    [Authorize]
     public IActionResult Get(
        [FromQuery] string name,
        [FromQuery] DateTime birthDateMax,
@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    //[Authorize]
+    [Authorize]
     public IActionResult GetById(
         [FromRoute] int id
     )
@@ -64,7 +64,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{userId}/sales")]
-    //[Authorize]
+    [Authorize]
     public IActionResult GetSalesBySellerId(
        [FromRoute] int userId)
     {
@@ -79,7 +79,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize]
+    [Authorize]
     public IActionResult Post(
         [FromBody] UserDTO userDTO
     )
@@ -91,7 +91,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{userId}/sales")]
-    //[Authorize]
+    [Authorize]
     public ActionResult<Sale> PostSaleUserId(
            [FromRoute] int userId,
            [FromBody] SaleDTO saleDTO)
@@ -104,7 +104,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("{userId}/buy")]
-    //[Authorize]
+    [Authorize]
    public ActionResult<Sale> PostBuyUserId(
           [FromRoute] int userId,
           [FromBody] BuyDTO buyDTO)
@@ -118,7 +118,7 @@ public class UsersController : ControllerBase
       
 
     [HttpDelete("{userId}")]
-    //[Authorize]
+    [Authorize]
     public ActionResult Delete(
        [FromRoute] int userId
    )

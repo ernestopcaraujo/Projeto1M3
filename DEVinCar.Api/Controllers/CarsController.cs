@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 using DEVinCar.Domain.Interfaces.Services;
+using DEVinCar.Api.Config;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -17,17 +18,19 @@ public class CarsController : ControllerBase
     private readonly IMemoryCache _cache;
     private readonly ICarsService _carsService;
     private readonly ISalesService _salesService;
+    private readonly CacheService<CarDTO> _carsCache;
 
-    public CarsController(ICarsService carsService,IMemoryCache cache, ISalesService salesService)
+    public CarsController(ICarsService carsService,IMemoryCache cache, ISalesService salesService,CacheService<CarDTO> carsCache)
     {
         _carsService = carsService;
         _cache = cache;
         _salesService = salesService;
+        _carsCache = carsCache;
     }
 
 
     [HttpGet("{carId}")]
-    //[Authorize(Roles = "Gerente")]
+    [Authorize(Roles = "Gerente")]
     public IActionResult GetById([FromRoute] int carId)
     {
         var car = _carsService.GetById(carId);
@@ -36,7 +39,7 @@ public class CarsController : ControllerBase
 
 
     [HttpGet]
-    //[Authorize(Roles = "Gerente")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult Get(
         [FromQuery] string name,
         [FromQuery] decimal priceMin,
@@ -50,7 +53,7 @@ public class CarsController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize(Roles = "Gerente")]
+    [Authorize(Roles = "Gerente")]
     public IActionResult Post(
     [FromBody] CarDTO carDTO
     )
@@ -68,7 +71,7 @@ public class CarsController : ControllerBase
     }
 
     [HttpDelete("{carId}")]
-    //[Authorize(Roles = "Gerente")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult Delete([FromRoute] int carId)
     {
         _carsService.RemoveCar(carId);
@@ -77,7 +80,7 @@ public class CarsController : ControllerBase
     }
 
     [HttpPut("{carId}")]
-    //[Authorize(Roles = "Gerente")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult<Car> Put([FromBody] CarDTO carDto, [FromRoute] int carId)
     {
         _carsService.PutCar(carDto,carId);
