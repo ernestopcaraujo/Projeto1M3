@@ -141,6 +141,7 @@ public class StatesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public ActionResult<List<GetStateViewModel>> Get([FromQuery] string name) {
         var query = _context.States.AsQueryable();
 

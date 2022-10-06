@@ -9,4 +9,4 @@ namespace DEVinCar.Api.Security
     {
         public static readonly string Secret = "b89cec4f51557eeb5ebeb37f59e75f3d05b47686";
     }
-}
+} 
