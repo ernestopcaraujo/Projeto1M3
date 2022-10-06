@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using DEVinCar.Domain.Annotations;
+using DEVinCar.Domain.Enum;
 using DEVinCar.Domain.Models;
 
 namespace DEVinCar.Domain.DTOs{
@@ -15,6 +16,10 @@ namespace DEVinCar.Domain.DTOs{
         [MinLength(4, ErrorMessage = "The password must contain at least 4 digits")]
         [DistinctCharactersAttribute]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "The role is required")]
+        [MaxLength(8)]
+        public Permissions Role {get; set;}
 
         public LoginDTO()
         {

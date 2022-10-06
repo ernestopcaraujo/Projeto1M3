@@ -10,19 +10,27 @@ namespace DEVinCar.Domain.Models
         public string Password { get; set; }
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
-        //public Permissions Role {get; set;}
+        public Permissions Role {get; set;}
 
         public User()
         {
             
         }
-        public User(int id, string email, string password, string name, DateTime birthDate)
+        public User(
+            int id, 
+            string email, 
+            string password, 
+            string name, 
+            DateTime birthDate,
+            Permissions role
+            )
         {
             Id = id;
             Email = email;
             Password = password;
             Name = name;
             BirthDate = birthDate;
+            Role = role;
         }
         public User(UserDTO userDTO)
         {
@@ -30,6 +38,7 @@ namespace DEVinCar.Domain.Models
             Email = userDTO.Email;
             Password = userDTO.Password;
             BirthDate = userDTO.BirthDate;
+            Role = userDTO.Role;
         }
     }
 }
