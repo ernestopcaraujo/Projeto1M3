@@ -33,6 +33,7 @@ namespace DEVinCar.Infra.Data.Repositories
         public virtual void RemoveBase (TEntity entity)
         {
             _context.Set<TEntity>().Remove(entity);
+            _context.SaveChanges();
         }
 
         public virtual IQueryable <TEntity> QueryBase()

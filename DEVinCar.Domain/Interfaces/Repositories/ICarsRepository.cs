@@ -9,9 +9,10 @@ namespace DEVinCar.Domain.Interfaces.Repositories
         public IQueryable<Car> QueryBase();
         void InsertBase (Car newCar);
         bool CheckCar(Car newCar);
-        void RemoveBase (Car carRemove);
+        void RemoveBase (Car carRemoved);
         bool CheckCarName(CarDTO carDTO, int carId);
         void UpdateCar(CarDTO carDTO, int carId);
+        public IQueryable<Car> QueryCar();
         
     }
 }

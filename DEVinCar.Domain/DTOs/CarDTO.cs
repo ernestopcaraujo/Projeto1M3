@@ -10,6 +10,11 @@ namespace DEVinCar.Domain.DTOs
         public string Name { get; set; }
         public decimal SuggestedPrice { get; set; }
 
+        public CarDTO ()
+        {
+            
+        }
+
         public CarDTO (Car car)
         {
             Name = car.Name;

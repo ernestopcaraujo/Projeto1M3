@@ -8,6 +8,6 @@ namespace DEVinCar.Domain.Interfaces.Services
 {
     public interface IDeliveryService
     {
-        List<Delivery> GetDelivery(int addressId, int saleId);
+        List<Delivery> GetDelivery(int? addressId, int? saleId);
     }
 }

@@ -9,7 +9,7 @@ namespace DEVinCar.Domain.Interfaces.Repositories
 {
     public interface IUsersRepository
     {
-        public IQueryable<User> QueryBase();
+        public IQueryable<User> QueryUser();
         User GetByIdBase(int id);
         public User CheckUserByEmail(string email);
         void InsertBase(User user);

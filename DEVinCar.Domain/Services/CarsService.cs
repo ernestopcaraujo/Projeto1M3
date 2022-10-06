@@ -30,7 +30,7 @@ namespace DEVinCar.Domain.Services
 
         public Car GetById(int id)
         {
-            Car car = _carsRepository.GetByIdBase(id);
+            var car = _carsRepository.GetByIdBase(id);
             if (car == null)
             {
                 throw new NotExistsException("This car does not exists !");
@@ -44,52 +44,58 @@ namespace DEVinCar.Domain.Services
             return (car);
         }
 
-        public List<Car> GetList(string name, decimal? priceMin, decimal? priceMax)
+        public IList<Car> GetList(string name, decimal? priceMin, decimal? priceMax)
         {
-            var query = _carsRepository.QueryBase();
+            var query = _carsRepository.QueryCar();
+
+            if ((priceMin == 0)&&(priceMax == 0)&&(string.IsNullOrEmpty(name)))
+            {
+                query = _carsRepository.QueryCar();
+            }
 
             if (!string.IsNullOrEmpty(name))
             {
                 query = query.Where(c => c.Name.Contains(name));
+
             }
 
-            if (priceMin > priceMax)
+            if ((priceMin != 0)&&(priceMax != 0)&&(priceMin > priceMax))
             {
                 throw new IncompatibleValuesException(
-                    "The minimum price is higer than maximum price !"
+                    $"The minimum price {priceMin} is higer {priceMax} than maximum price !"
                 );
             }
 
-            if (priceMin.HasValue)
+            if ((priceMin != 0) && (priceMax == 0))
             {
                 query = query.Where(c => c.SuggestedPrice >= priceMin);
             }
 
-            if (priceMax.HasValue)
+            if ((priceMin == 0) && (priceMax != 0))
             {
                 query = query.Where(c => c.SuggestedPrice <= priceMax);
             }
-
-            if (!query.ToList().Any())
+            
+            if (query.Count()==0)
             {
-                throw new NotExistsException("This query has no result !");
+                throw new NotExistsException("No data found !");
             }
-
+            
             return query.ToList();
         }
 
         public void InsertCar(Car newCar)
         {
-            var checkedCar = _carsRepository.CheckCar(newCar);
 
+            var checkedCar = _carsRepository.CheckCar(newCar);
             if (checkedCar == true)
             {
                 throw new IncompatibleValuesException(
                     "Car price is not right or the car already exists !"
                 );
             }
-
             _carsRepository.InsertBase(newCar);
+            
         }
 
         public void RemoveCar(int carId)
@@ -110,7 +116,6 @@ namespace DEVinCar.Domain.Services
 
             _carsRepository.RemoveBase(carRemoved);
 
-            throw new NotImplementedException();
         }
 
         public void PutCar(CarDTO carDTO, int carId)

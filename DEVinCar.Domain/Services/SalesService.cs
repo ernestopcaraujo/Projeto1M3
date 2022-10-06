@@ -26,13 +26,13 @@ namespace DEVinCar.Domain.Services
  
             if (seller == null)
             {
-                throw new NotExistsException("The Seller does not exist!");
+                throw new NotFoundException("The Seller was not alpha found !");
             }
 
             var buyer = _usersService.GetByIdBuyService(sale.BuyerId);
             if (buyer == null)
             {
-                throw new NotExistsException("The Buyer does not exist!");
+                throw new NotFoundException("The Buyer was not found !");
             }
 
             if (sale.SaleDate == null)
@@ -43,20 +43,20 @@ namespace DEVinCar.Domain.Services
             _salesRepository.InsertBase(sale);
         }
         
-        public void InsertBuy(Sale sale)
+        public void InsertBuy(Sale sale)//Endpoint USER ID BUY
         {
-            var buyer = _usersService.GetByIdService(sale.BuyerId);
+            var buyer = _salesRepository.GetBuyerId(sale.BuyerId);
 
-            if (buyer == null)
+            if (buyer == false)
             {
-                throw new NotExistsException("The Buyer does not exist!");
+                throw new NotFoundException("The Buyer was not found!");
             }
 
-            var seller = _usersService.GetByIdService(sale.SellerId);
+            var seller = _salesRepository.GetSellerId(sale.SellerId);
             
             if (seller == null)
             {
-                throw new NotExistsException("The Seller does not exist!");
+                throw new NotFoundException("The Seller was not found!");
             }
             
             if (sale.SaleDate == null)

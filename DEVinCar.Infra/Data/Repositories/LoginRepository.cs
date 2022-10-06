@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using DEVinCar.Domain.DTOs;
 using DEVinCar.Infra.Data;
 using DEVinCar.Domain.Models;
+using DEVinCar.Domain.Interfaces.Repositories;
 
 namespace DEVinCar.Infra.Data.Repositories
 {
-    public class AutenticationRepository : BaseRepository<User,string>
+    public class LoginRepository : BaseRepository<User,string>, ILoginRepository
     {
-        public AutenticationRepository (DevInCarDbContext context) : base (context)
+        public LoginRepository (DevInCarDbContext context) : base (context)
         {
             
         }
