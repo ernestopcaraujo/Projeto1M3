@@ -77,7 +77,7 @@ public class DevInCarDbContext : DbContext
                         "123456opp78",
                         "Jose",
                         new DateTime(2000, 12, 10),
-                        Domain.Enum.Permissions.Gerente
+                        "Gerente"
                     ),
                     new User(
                         2,
@@ -85,7 +85,7 @@ public class DevInCarDbContext : DbContext
                         "987dasd654321",
                         "Andrea",
                         new DateTime(1999, 05, 11),
-                        Domain.Enum.Permissions.Vendedor
+                        "Vendedor"
                     ),
                     new User(
                         3, 
@@ -93,7 +93,7 @@ public class DevInCarDbContext : DbContext
                         "2589asd", 
                         "Adao", 
                         new DateTime(2005, 09, 02),
-                        Domain.Enum.Permissions.Comprador
+                        "Comprador"
                     ),
                     new User(
                         4,
@@ -101,7 +101,7 @@ public class DevInCarDbContext : DbContext
                         "asd45uio",
                         "Monique",
                         new DateTime(2001, 06, 07),
-                        Domain.Enum.Permissions.Comprador
+                        "Comprador"
                     ),
                 }
             );

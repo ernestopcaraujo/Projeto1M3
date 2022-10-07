@@ -20,8 +20,9 @@ public static class TokenService
                 (
                     new Claim []
                     {
-                        new Claim(ClaimTypes.Name, incomingUser.Name),
                         new Claim(ClaimTypes.Email, incomingUser.Email),
+                        new Claim(ClaimTypes.Name, incomingUser.Password),
+                        new Claim(ClaimTypes.Role, incomingUser.Role)
                     }
                 ),
                 Expires = DateTime.UtcNow.AddHours(2),
