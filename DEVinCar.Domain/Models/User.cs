@@ -10,7 +10,7 @@ namespace DEVinCar.Domain.Models
         public string Password { get; set; }
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
-        public Permissions Role {get; set;}
+        public string Role {get; set;}
 
         public User()
         {
@@ -22,7 +22,7 @@ namespace DEVinCar.Domain.Models
             string password, 
             string name, 
             DateTime birthDate,
-            Permissions role
+            string role
             )
         {
             Id = id;

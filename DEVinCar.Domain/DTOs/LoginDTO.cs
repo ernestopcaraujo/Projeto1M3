@@ -18,8 +18,8 @@ namespace DEVinCar.Domain.DTOs{
         public string Password { get; set; }
 
         [Required(ErrorMessage = "The role is required")]
-        [MaxLength(8)]
-        public Permissions Role {get; set;}
+        [MaxLength(15)]
+        public string Role {get; set;}
 
         public LoginDTO()
         {

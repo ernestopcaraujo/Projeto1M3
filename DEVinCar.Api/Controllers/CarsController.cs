@@ -44,7 +44,7 @@ public class CarsController : ControllerBase
         }
 
         return Ok(car);
-        //cache deste Endpoint aplicado em CarsServices.cs
+        
     }
 
 

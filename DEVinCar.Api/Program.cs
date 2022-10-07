@@ -63,9 +63,8 @@ builder.Services.AddScoped<IDeliveryRepository,DeliveryRepository>();
 builder.Services.AddScoped<ISalesService,SalesService>();
 builder.Services.AddScoped<ISalesRepository,SalesRepository>();
 
-
-
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped(typeof(CacheService<>));
 
 var key = Encoding.ASCII.GetBytes(Settings.Secret);
 
@@ -114,6 +113,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseMiddleware<ErrorMiddleware>();
+//app.UseMiddleware<ErrorMiddleware>();
 
 app.Run();
