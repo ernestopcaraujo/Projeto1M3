@@ -1,118 +1,100 @@
 
-using DEVinCar.Api.Data;
-using DEVinCar.Api.DTOs;
-using DEVinCar.Api.Models;
+using DEVinCar.Infra.Data;
+using DEVinCar.Domain.DTOs;
+using DEVinCar.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
+using DEVinCar.Domain.Interfaces.Services;
+using DEVinCar.Api.Config;
 
 namespace DEVinCar.Api.Controllers;
 
 [ApiController]
 [Route("api/car")]
-public class CarController : ControllerBase
+public class CarsController : ControllerBase
 {
-    private readonly DevInCarDbContext _context;
+    
+    private readonly IMemoryCache _cache;
+    private readonly ICarsService _carsService;
+    private readonly ISalesService _salesService;
+    private readonly CacheService<CarDTO> _carsCache;
 
-    public CarController(DevInCarDbContext context)
+    public CarsController(ICarsService carsService,IMemoryCache cache, ISalesService salesService,CacheService<CarDTO> carsCache)
     {
-        _context = context;
+        
+        _carsService = carsService;
+        _cache = cache;
+        _salesService = salesService;
+        carsCache.Config("car",new TimeSpan(0,5,0));
+        _carsCache = carsCache;
     }
+
 
     [HttpGet("{carId}")]
-    public ActionResult<Car> GetById([FromRoute] int carId)
+    [Authorize(Roles = "Gerente")]
+    public IActionResult GetById([FromRoute] int carId)
     {
-        var car = _context.Cars.Find(carId);
-        if (car == null) return NotFound();
+        var car = _carsService.GetById(carId);
+
+        if (!_cache.TryGetValue<Car>($"car:{carId}", out car))
+        {
+            car = _carsService.GetByIdCache(carId);
+            _cache.Set($"car:{carId}", car, new TimeSpan(0, 5, 0));
+        }
+
         return Ok(car);
+        
     }
 
+
     [HttpGet]
-    public ActionResult<List<Car>> Get(
+    [Authorize(Roles = "Gerente")]
+    public ActionResult Get(
         [FromQuery] string name,
-        [FromQuery] decimal? priceMin,
-        [FromQuery] decimal? priceMax
+        [FromQuery] decimal priceMin,
+        [FromQuery] decimal priceMax
     )
     {
-        var query = _context.Cars.AsQueryable();
-        if (!string.IsNullOrEmpty(name))
-        {
-            query = query.Where(c => c.Name.Contains(name));
-        }
-        if (priceMin > priceMax)
-        {
-            return BadRequest();
-        }
-        if (priceMin.HasValue)
-        {
-            query = query.Where(c => c.SuggestedPrice >= priceMin);
-        }
-        if (priceMax.HasValue)
-        {
-            query = query.Where(c => c.SuggestedPrice <= priceMax);
-        }
-        if (!query.ToList().Any())
-        {
-            return NoContent();
-        }
-        return Ok(query.ToList());
+        var car = _carsService.GetList(name,priceMin,priceMax);
+        return Ok(car.ToList());
+
     }
 
     [HttpPost]
-    public ActionResult<Car> Post(
-        [FromBody] CarDTO body
+    [Authorize(Roles = "Gerente")]
+    public IActionResult Post(
+    [FromBody] CarDTO carDTO
     )
     {
-        if (_context.Cars.Any(c => c.Name == body.Name || body.SuggestedPrice <= 0))
+        var newCar = new Car
         {
-            return BadRequest();
-        }
-        var car = new Car
-        {
-            Name = body.Name,
-            SuggestedPrice = body.SuggestedPrice,
+            Name =carDTO.Name,
+            SuggestedPrice = carDTO.SuggestedPrice,
         };
-        _context.Cars.Add(car);
-        _context.SaveChanges();
-        return Created("api/car", car);
+
+        _carsService.InsertCar(newCar);
+
+        return Created("api/car", newCar.Id);
+
     }
 
     [HttpDelete("{carId}")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult Delete([FromRoute] int carId)
     {
-        var car = _context.Cars.Find(carId);
-        var soldCar = _context.SaleCars.Any(s => s.CarId == carId);
-        if (car == null)
-        {
-            return NotFound();
-        }
-        if (soldCar)
-        {
-            return BadRequest();
-        }
-        _context.Remove(car);
-        _context.SaveChanges();
-        return NoContent();
+        _carsService.RemoveCar(carId);
+        _carsCache.Remove($"{carId}");
+        
+       return NoContent();
     }
 
     [HttpPut("{carId}")]
+    [Authorize(Roles = "Gerente")]
     public ActionResult<Car> Put([FromBody] CarDTO carDto, [FromRoute] int carId)
     {
-        var car = _context.Cars.Find(carId);
-        var name = _context.Cars.Any(c => c.Name == carDto.Name && c.Id != carId);
-
-
-        if (car == null)
-            return NotFound();
-        if (carDto.Name.Equals(null) || carDto.SuggestedPrice.Equals(null))
-            return BadRequest();
-        if (carDto.SuggestedPrice <= 0)
-            return BadRequest();
-        if (name)
-            return BadRequest();
-
-        car.Name = carDto.Name;
-        car.SuggestedPrice = carDto.SuggestedPrice;
-
-        _context.SaveChanges();
-        return NoContent();
+        _carsService.PutCar(carDto,carId);
+        _carsCache.Set($"{carId}", carDto);
+        return Ok();
     }
 }

@@ -1,9 +1,10 @@
-﻿using DEVinCar.Api.Models;
-using DEVinCar.Api.Data;
-using DEVinCar.Api.DTOs;
+﻿using DEVinCar.Domain.Models;
+using DEVinCar.Infra.Data;
+using DEVinCar.Domain.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using DEVinCar.Api.ViewModels;
+using DEVinCar.Domain.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -20,6 +21,7 @@ public class AddressesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public ActionResult<List<AddressViewModel>> Get([FromQuery] int? cityId,
                                                     [FromQuery] int? stateId,
                                                     [FromQuery] string street,
@@ -69,6 +71,7 @@ public class AddressesController : ControllerBase
     }
 
     [HttpPatch("{addressId}")]
+    [Authorize]
     public ActionResult<AddressViewModel> Patch([FromRoute] int addressId,
                                        [FromBody] AddressPatchDTO addressPatchDTO)
     {
@@ -125,6 +128,7 @@ public class AddressesController : ControllerBase
     }
 
     [HttpDelete("{addressId}")]
+    [Authorize]
 
     public ActionResult DeleteById([FromRoute] int addressId)
     {

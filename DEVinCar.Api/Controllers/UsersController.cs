@@ -1,214 +1,131 @@
-﻿using DEVinCar.Api.Models;
-using DEVinCar.Api.Data;
-using DEVinCar.Api.DTOs;
+﻿using DEVinCar.Domain.Models;
+using DEVinCar.Infra.Data;
+using DEVinCar.Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using DEVinCar.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVinCar.Api.Controllers;
 
 [ApiController]
 [Route("api/user")]
 
-public class UserController : ControllerBase
+public class UsersController : ControllerBase
 {
-    private readonly DevInCarDbContext _context;
-
-    public UserController(DevInCarDbContext context)
+    private readonly IUsersService _usersService;
+    private readonly ISalesService _salesService;
+    public UsersController(IUsersService usersService, ISalesService salesService)
     {
-        _context = context;
+        _usersService = usersService;
+        _salesService = salesService;
     }
 
     [HttpGet]
-    public ActionResult<List<User>> Get(
-       [FromQuery] string Name,
-       [FromQuery] DateTime? birthDateMax,
-       [FromQuery] DateTime? birthDateMin
-   )
+    [Authorize]
+    public IActionResult Get(
+       [FromQuery] string name,
+       [FromQuery] DateTime birthDateMax,
+       [FromQuery] DateTime birthDateMin)
     {
-        var query = _context.Users.AsQueryable();
-
-        if (!string.IsNullOrEmpty(Name))
-        {
-            query = query.Where(c => c.Name.Contains(Name));
-        }
-
-        if (birthDateMin.HasValue)
-        {
-            query = query.Where(c => c.BirthDate >= birthDateMin.Value);
-        }
-
-        if (birthDateMax.HasValue)
-        {
-            query = query.Where(c => c.BirthDate <= birthDateMax.Value);
-        }
-
-        if (!query.ToList().Any())
-        {
-            return NoContent();
-        }
-
-        return Ok(
-            query
-            .ToList()
-            );
+        var user = _usersService.GetByNameService(name,birthDateMax,birthDateMin);
+        return Ok(user.ToList());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<User> GetById(
+    [Authorize]
+    public IActionResult GetById(
         [FromRoute] int id
     )
     {
-        var user = _context.Users.Find(id);
-        if (user == null) return NotFound();
-        return Ok(user);
+        var userById = _usersService.GetByIdService(id);
+        
+        if (userById == null) 
+        {
+            return NotFound();
+        }
+
+        return Ok(userById);
     }
 
     [HttpGet("{userId}/buy")]
-    public ActionResult<Sale> GetByIdbuy(
+    //[Authorize]
+    public IActionResult GetByIdBuy(
        [FromRoute] int userId)
 
     {
-        var sales = _context.Sales.Where(s => s.BuyerId == userId);
+        var sales = _usersService.GetByIdBuyService(userId);
 
         if (sales == null || sales.Count() == 0)
         {
             return NoContent();
         }
+
         return Ok(sales.ToList());
     }
 
     [HttpGet("{userId}/sales")]
-    public ActionResult<Sale> GetSalesBySellerId(
+    [Authorize]
+    public IActionResult GetSalesBySellerId(
        [FromRoute] int userId)
     {
-        var sales = _context.Sales.Where(s => s.SellerId == userId);
+        var sales = _usersService.GetSalesBySellerIdService(userId);
 
         if (sales == null || sales.Count() == 0)
         {
             return NoContent();
         }
+        
         return Ok(sales.ToList());
     }
 
     [HttpPost]
-    public ActionResult<User> Post(
-        [FromBody] UserDTO userDto
+    [Authorize]
+    public IActionResult Post(
+        [FromBody] UserDTO userDTO
     )
     {
-        var newUser = _context.Users.FirstOrDefault(u => u.Email == userDto.Email);
-
-        if (newUser != null)
-        {
-            return BadRequest();
-        }
-
-        newUser = new User
-        {
-            Name = userDto.Name,
-            Email = userDto.Email,
-            Password = userDto.Password,
-            BirthDate = userDto.BirthDate
-        };
-
-        _context.Users.Add(newUser);
-        _context.SaveChanges();
+        var newUser = new User(userDTO);     
+        _usersService.InsertUser(newUser);
 
         return Created("api/users", newUser.Id);
     }
 
     [HttpPost("{userId}/sales")]
+    [Authorize]
     public ActionResult<Sale> PostSaleUserId(
            [FromRoute] int userId,
-           [FromBody] SaleDTO body)
+           [FromBody] SaleDTO saleDTO)
     {
+        var sale = new Sale(saleDTO);
+        sale.SellerId = userId;
+        _salesService.InsertSale(sale);
 
-        if (_context.Sales.Any(s => s.BuyerId == 0 || body.BuyerId == 0))
-        {
-            return BadRequest();
-        }
-
-        var user = _context.Users.Find(userId);
-        if (user == null)
-        {
-            return NotFound("The user does not exist!");
-        }
-
-        var bayer = _context.Users.Find(body.BuyerId);
-        if (bayer == null)
-        {
-            return NotFound("The user does not exist!");
-        }
-
-        if (body.SaleDate == null)
-        {
-            body.SaleDate = DateTime.Now;
-        }
-
-        var sale = new Sale
-        {
-            BuyerId = body.BuyerId,
-            SellerId = userId,
-            SaleDate = body.SaleDate,
-        };
-        _context.Sales.Add(sale);
-        _context.SaveChanges();
         return Created("api/sale", sale.Id);
-
     }
 
     [HttpPost("{userId}/buy")]
-
+    [Authorize]
    public ActionResult<Sale> PostBuyUserId(
           [FromRoute] int userId,
-          [FromBody] BuyDTO body)
+          [FromBody] BuyDTO buyDTO)
     {
+        var buy = new Sale(buyDTO);
+        buy.BuyerId = userId;
+        _salesService.InsertBuy(buy);
 
-        var user = _context.Users.Find(userId);
-        if (user == null)
-        {
-            return NotFound("The user does not exist!");
-        }
-
-        var seller = _context.Users.Find(body.SellerId);
-        if (seller == null)
-        {
-            return NotFound("The user does not exist!");
-        }
-        if (body.SaleDate == null)
-        {
-            body.SaleDate = DateTime.Now;
-        }
-
-        var buy = new Sale
-        {
-            BuyerId = userId,
-            SellerId = body.SellerId,
-            SaleDate = body.SaleDate,
-        };
-
-        _context.Sales.Add(buy);
-        _context.SaveChanges();
         return Created("api/user/{userId}/buy", buy.Id);
     }
       
 
     [HttpDelete("{userId}")]
+    [Authorize]
     public ActionResult Delete(
        [FromRoute] int userId
    )
     {
-        var user = _context.Users.Find(userId);
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-        _context.Users.Remove(user);
-        _context.SaveChanges();
-
-        return NoContent();
+        _usersService.RemoveUser(userId);
+        return Ok();
     }
-
-
 }
 
 

@@ -1,9 +1,10 @@
-﻿using DEVinCar.Api.Models;
-using DEVinCar.Api.Data;
-using DEVinCar.Api.DTOs;
-using DEVinCar.Api.ViewModels;
+﻿using DEVinCar.Domain.Models;
+using DEVinCar.Infra.Data;
+using DEVinCar.Domain.DTOs;
+using DEVinCar.Domain.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -19,6 +20,7 @@ public class StatesController : ControllerBase
     }
 
     [HttpPost("{stateId}/city")]
+    [Authorize]
     public ActionResult<int> PostCity(
         [FromRoute] int stateId,
         [FromBody] CityDTO cityDTO
@@ -50,6 +52,7 @@ public class StatesController : ControllerBase
     }
 
     [HttpPost("{stateId}/city/{cityId}/address")]
+    [Authorize]
     public ActionResult<int> PostAdress(
         [FromRoute] int stateId,
         [FromRoute] int cityId,
@@ -84,6 +87,7 @@ public class StatesController : ControllerBase
     }
 
     [HttpGet("{stateId}/city/{cityId}")]
+    [Authorize]
 
     public ActionResult<GetCityByIdViewModel> GetCityById
     (
@@ -116,6 +120,7 @@ public class StatesController : ControllerBase
     }
 
     [HttpGet("{stateId}")]
+    [Authorize]
     public ActionResult<GetStateByIdViewModel> GetStateById(
             [FromRoute] int stateId
         )
@@ -136,6 +141,7 @@ public class StatesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public ActionResult<List<GetStateViewModel>> Get([FromQuery] string name) {
         var query = _context.States.AsQueryable();
 
@@ -162,6 +168,7 @@ public class StatesController : ControllerBase
     }
 
     [HttpGet("{stateId}/city")]
+    [Authorize]
     public ActionResult<GetCityByIdViewModel> GetCityByStateId(
         [FromRoute] int stateId,
         [FromQuery] string? name

@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using DEVinCar.Api.Data;
-using DEVinCar.Api.DTOs;
-using DEVinCar.Api.Models;
+using DEVinCar.Infra.Data;
+using DEVinCar.Domain.DTOs;
+using DEVinCar.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DEVinCar.Api.ViewModels;
+using DEVinCar.Domain.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVinCar.Api.Controllers;
 
@@ -19,6 +20,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpGet("{saleId}")]
+    [Authorize]
     public ActionResult<SaleViewModel> GetItensSale(
         [FromRoute] int saleId)
     {
@@ -46,6 +48,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpPost("{saleId}/item")]
+    [Authorize(Roles = "Gerente,Vendedor")]
     public ActionResult<SaleCar> PostSale(
        [FromBody] SaleCarDTO body,
        [FromRoute] int saleId
@@ -82,6 +85,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpPost("{saleId}/deliver")]
+    [Authorize]
     public ActionResult<DeliveryDTO> PostDeliver(
            [FromRoute] int saleId,
            [FromBody] DeliveryDTO body)
@@ -126,6 +130,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpPatch("{saleId}/car/{carId}/amount/{amount}")]
+    [Authorize]
     public ActionResult<SaleCar> Patch(
             [FromRoute] int saleId,
             [FromRoute] int carId,
@@ -160,6 +165,7 @@ public class SalesController : ControllerBase
     }
 
     [HttpPatch("{saleId}/car/{carId}/price/{unitPrice}")]
+    [Authorize]
     public ActionResult<SaleCar> Patch(
            [FromRoute] int saleId,
            [FromRoute] int carId,
