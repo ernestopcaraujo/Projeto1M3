@@ -39,7 +39,7 @@ namespace DEVinCar.Domain.Services
             if (!_cache.TryGetValue<Car>($"car:{id}", out car))
             {
                 car = _carsRepository.GetByIdBase(id);
-                _cache.Set($"car:{id}", car, new TimeSpan(0, 10, 0));
+                _cache.Set($"car:{id}", car, new TimeSpan(0, 5, 0));
             }
             return (car);
         }
@@ -145,6 +145,13 @@ namespace DEVinCar.Domain.Services
 
             _carsRepository.UpdateCar(carDTO,carId);
 
+        }
+
+        public Car GetByIdCache(int id)
+        {
+            var carCache =_carsRepository.GetByIdBase(id);
+
+            return (carCache);
         }
 
     }
