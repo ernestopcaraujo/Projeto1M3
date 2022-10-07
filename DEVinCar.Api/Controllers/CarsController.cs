@@ -22,9 +22,11 @@ public class CarsController : ControllerBase
 
     public CarsController(ICarsService carsService,IMemoryCache cache, ISalesService salesService,CacheService<CarDTO> carsCache)
     {
+        
         _carsService = carsService;
         _cache = cache;
         _salesService = salesService;
+        carsCache.Config("car",new TimeSpan(0,5,0));
         _carsCache = carsCache;
     }
 
@@ -34,7 +36,15 @@ public class CarsController : ControllerBase
     public IActionResult GetById([FromRoute] int carId)
     {
         var car = _carsService.GetById(carId);
+
+        if (!_cache.TryGetValue<Car>($"car:{carId}", out car))
+        {
+            car = _carsService.GetByIdCache(carId);
+            _cache.Set($"car:{carId}", car, new TimeSpan(0, 5, 0));
+        }
+
         return Ok(car);
+        //cache deste Endpoint aplicado em CarsServices.cs
     }
 
 
@@ -47,7 +57,6 @@ public class CarsController : ControllerBase
     )
     {
         var car = _carsService.GetList(name,priceMin,priceMax);
-        //var carDTO = car.Select(c=>new CarDTO(c));
         return Ok(car.ToList());
 
     }
@@ -75,6 +84,7 @@ public class CarsController : ControllerBase
     public ActionResult Delete([FromRoute] int carId)
     {
         _carsService.RemoveCar(carId);
+        _carsCache.Remove($"{carId}");
         
        return NoContent();
     }
@@ -84,6 +94,7 @@ public class CarsController : ControllerBase
     public ActionResult<Car> Put([FromBody] CarDTO carDto, [FromRoute] int carId)
     {
         _carsService.PutCar(carDto,carId);
+        _carsCache.Set($"{carId}", carDto);
         return Ok();
     }
 }

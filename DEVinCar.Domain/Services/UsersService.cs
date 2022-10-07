@@ -51,9 +51,6 @@ namespace DEVinCar.Domain.Services
         }
 
 
-
-
-
         public User GetByIdService(int id)
         {
             var user = _usersRepository.GetByIdBase(id);

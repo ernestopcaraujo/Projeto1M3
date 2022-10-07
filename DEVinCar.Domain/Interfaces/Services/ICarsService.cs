@@ -14,6 +14,7 @@ namespace DEVinCar.Domain.Interfaces.Services
         void InsertCar(Car newCar);
         void RemoveCar(int carId);
         void PutCar (CarDTO carDTO, int carId);
+        public Car GetByIdCache(int id);
         
     }
 }
